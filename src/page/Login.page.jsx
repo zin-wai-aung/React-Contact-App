@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
 
 import {
   ContainerComponent,
@@ -7,14 +8,20 @@ import {
   ButtonComponent,
   LoadingComponent,
   PreventComponent,
+  ErrorComponent,
 } from "../component";
-import { Login } from "../service/auth.service";
-import useApi from "../hook/useApi";
+import { LoginAction } from "../store/action/auth.action";
 
 const LoginPage = () => {
   const nav = useNavigate();
 
-  const { handleDealApi, loading, error, data } = useApi(Login);
+  const {loading,data,error,auth} = useSelector((store)=>store.auth)
+  const dispatch = useDispatch();
+
+
+  // const { handleDealApi, loading, error, data } = useApi(Login);
+
+
 
   const [formData, setFormData] = useState({
     email: "",
@@ -32,8 +39,9 @@ const LoginPage = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    handleDealApi(formData);
+    // handleDealApi(formData);
     // console.log(formData);
+    LoginAction(dispatch, formData);
   };
 
   return (
@@ -48,6 +56,8 @@ const LoginPage = () => {
                 Login Your Contact
               </h1>
 
+                {error && <ErrorComponent>{error}</ErrorComponent>}
+                
               <form className=" space-y-4" onSubmit={handleSubmit}>
                 <FormComponent
                   value={formData.email}

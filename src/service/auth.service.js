@@ -21,3 +21,13 @@ export const Login = async (formData) => {
     throw new Error(e.message);
   }
 };
+
+
+export const getProfile = async () => {
+  try {
+    const res = await api.get("/user-profile");
+    return res;
+  } catch (e) {
+    throw new Error(e.message);
+  }
+};

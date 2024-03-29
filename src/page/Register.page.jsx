@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Register } from "../service/auth.service";
+import { useSelector, useDispatch } from "react-redux";
+
 
 import {
   ContainerComponent,
@@ -10,12 +11,15 @@ import {
   ErrorComponent,
   PreventComponent,
 } from "../component";
-import useApi from "../hook/useApi";
+import { LoginAction } from "../store/action/auth.action";
 
 const RegisterPage = () => {
   const nav = useNavigate();
 
-  const { handleDealApi, loading, error, data } = useApi(Register);
+  const { loading, data, error, auth } = useSelector((store) => store.auth);
+  const dispatch = useDispatch();
+
+  // const { handleDealApi, loading, error, data } = useApi(Register);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -26,7 +30,7 @@ const RegisterPage = () => {
 
   useEffect(() => {
     if (data) {
-      nav("/");
+      nav("/home");
     }
   },[data])
 
@@ -36,9 +40,9 @@ const RegisterPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // const res = await Register(formData);
     // console.log(res);
-    handleDealApi(formData)
+    // handleDealApi(formData)
+    LoginAction(dispatch,formData)
   };
 
   return (
