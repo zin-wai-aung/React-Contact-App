@@ -1,14 +1,11 @@
-import React, { useState } from 'react'
-import {
-  FormComponent,
-  ButtonComponent,
-} from "../component";
-import { addNewContact } from '../service/contact.service';
-import {useNavigate} from "react-router-dom"
+import React, { useEffect, useState } from "react";
+import { FormComponent, ButtonComponent } from "../component";
+import { addNewContact, editContact } from "../service/contact.service";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const ContactAppPage = () => {
-
   const nav = useNavigate();
+  const location = useLocation();
 
   const [formData, setFormData] = useState({
     name: "",
@@ -17,20 +14,31 @@ const ContactAppPage = () => {
     address: "",
   });
 
+  useEffect(() => {
+    if (location.state?.edit) {
+      const { name, email, phone, address } = location.state.data;
+      setFormData({ name, phone, email, address });
+    }
+  }, [location]);
+
   const handleChange = (e) => {
     setFormData((pre) => ({ ...pre, [e.target.name]: e.target.value }));
   };
 
-  const handleAdd =  async (e) => {
+  const handleAdd = async (e) => {
     e.preventDefault();
-    const res = await addNewContact(formData);
+    let res;
+    if (location.state?.edit) {
+      res = await editContact(location.state.id, formData);
+    } else {
+      res = await addNewContact(formData);
+    }
     // console.log(res)
     if (res) {
-      
-      nav("/home")
+      nav("/home");
     }
   };
-  
+
   return (
     <div className="Center">
       <div className=" w-1/3">
@@ -72,12 +80,12 @@ const ContactAppPage = () => {
 
           <ButtonComponent type="submit" style={""}>
             {" "}
-            Create Contact
+            {location.state?.data ? "Update Contact" : "Create Contact"}
           </ButtonComponent>
         </form>
       </div>
     </div>
   );
-}
+};
 
-export default ContactAppPage
+export default ContactAppPage;

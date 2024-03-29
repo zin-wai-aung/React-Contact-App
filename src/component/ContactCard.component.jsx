@@ -10,6 +10,11 @@ const ContactCardComponent = ({ data }) => {
     nav(`/home/contact/${data.id}`);
   };
 
+  const handleEdit = () => {
+    // console.log(data.id)
+    nav("/home/add",{state:{edit:true,data,id:data.id}})
+  }
+
   return (
     <div className=" bg-slate-200 rounded-lg shadow text-indigo-600 flex justify-between items-center p-5 my-3">
       <div onClick={handleRedirect} className=" flex flex-col cursor-pointer">
@@ -18,7 +23,7 @@ const ContactCardComponent = ({ data }) => {
         <h3 className=" text-lg">{data.email}</h3>
       </div>
       <div className=" flex items-center space-x-3">
-        <FaEdit className=" text-2xl" />
+        <FaEdit onClick={handleEdit} className=" text-2xl cursor-pointer" />
         <MdDelete className=" text-2xl  text-red-500" />
       </div>
     </div>

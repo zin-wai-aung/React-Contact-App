@@ -23,7 +23,7 @@ const ContactPage = () => {
   }, []);
 
   return (
-    <div className="Center">
+    <div className="Center mt-14">
       <div className=" w-2/3 flex justify-center items-center">
         {items.loading ? (
           <LoadingComponent />

@@ -19,10 +19,24 @@ export const getSingleContact = async (id) => {
   }
 };
 
+
+//add new contact
 export const addNewContact = async (formData) => {
   try {
     const res = await api.post("/contact", formData);
     return res.data.success;
+  } catch (e) {
+    throw new Error(e.message);
+  }
+};
+
+//update contact
+export const editContact = async (id,formData) => {
+  try {
+    const res = await api.put(`/contact/${id}`, formData);
+    if (res.data) {
+      return true;
+    }
   } catch (e) {
     throw new Error(e.message);
   }
