@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getAllContacts } from "../service/contact.service";
+import { getAllContacts, deleteContact } from "../service/contact.service";
 import { LoadingComponent, ErrorComponent, ContactCard } from "../component";
 
 const ContactPage = () => {
@@ -8,6 +8,15 @@ const ContactPage = () => {
     error: null,
     data: null,
   });
+
+  const [deleteItem, setDeleteItem] = useState(false);
+
+  const handleDelete = async (id) => {
+    // console.log(id);
+    await deleteContact(id);
+    setDeleteItem((pre)=>!pre) // =  setDeleteItem(!deleteItem)
+
+  };
 
   useEffect(() => {
     (async () => {
@@ -20,7 +29,7 @@ const ContactPage = () => {
         setItems((pre) => ({ ...pre, loading: false, data: res }));
       }
     })();
-  }, []);
+  }, [deleteItem]);
 
   return (
     <div className="Center mt-14">
@@ -36,6 +45,7 @@ const ContactPage = () => {
                 <ContactCard
                   key={i.id}
                   data={i}
+                  handleDelete={handleDelete}
                   className="bg-white rounded-lg shadow-md p-6"
                 />
               ))}
