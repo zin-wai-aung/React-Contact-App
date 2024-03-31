@@ -13,8 +13,20 @@ const contactEndpoint = apiService.injectEndpoints({
         },
       }),
     }),
+    createContact: builder.mutation({
+      query: (formData) => ({
+        url: `/contact`,
+            method: "POST",
+        body:formData,
+        headers: {
+          Authorization:
+            localStorage.getItem("auth") &&
+            `Bearer ${JSON.parse(localStorage.getItem("auth"))}`,
+        },
+      }),
+    }),
   }),
 });
 
-export const {useGetContactQuery } = contactEndpoint;
+export const {useGetContactQuery , useCreateContactMutation } = contactEndpoint;
 
