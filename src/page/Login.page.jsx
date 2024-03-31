@@ -10,7 +10,8 @@ import {
   PreventComponent,
   ErrorComponent,
 } from "../component";
-import { LoginAction } from "../store/action/auth.action";
+import { login, processing } from "../store/slice/auth.slice";
+import { Login } from "../service/auth.service";
 
 const LoginPage = () => {
   const nav = useNavigate();
@@ -37,11 +38,11 @@ const LoginPage = () => {
   const handleChange = (e) =>
     setFormData((pre) => ({ ...pre, [e.target.name]: e.target.value }));
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
-    // handleDealApi(formData);
-    // console.log(formData);
-    LoginAction(dispatch, formData);
+    dispatch(processing()); //loading true
+    const res = await Login(formData);
+    dispatch(login(res.data))
   };
 
   return (

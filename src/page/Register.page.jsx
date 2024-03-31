@@ -11,7 +11,8 @@ import {
   ErrorComponent,
   PreventComponent,
 } from "../component";
-import { LoginAction } from "../store/action/auth.action";
+import { login, processing } from "../store/slice/auth.slice";
+import { Register } from "../service/auth.service";
 
 const RegisterPage = () => {
   const nav = useNavigate();
@@ -40,9 +41,10 @@ const RegisterPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // console.log(res);
-    // handleDealApi(formData)
-    LoginAction(dispatch,formData)
+    dispatch(processing());
+    const res = await Register(formData);
+    console.log(res.data)
+    // dispatch(login(res.data));
   };
 
   return (

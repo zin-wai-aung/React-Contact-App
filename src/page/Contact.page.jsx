@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { getAllContacts, deleteContact } from "../service/contact.service";
 import { LoadingComponent, ErrorComponent, ContactCard } from "../component";
+import { useGetContactQuery } from "../store/service/endpoint/contact.endpoint";
 
 const ContactPage = () => {
-  const [items, setItems] = useState({
-    loading: true,
-    error: null,
-    data: null,
-  });
 
+  const { isError,isLoading,data,isSuccess } = useGetContactQuery();
+  
   const [deleteItem, setDeleteItem] = useState(false);
 
   const handleDelete = async (id) => {
@@ -18,30 +16,17 @@ const ContactPage = () => {
 
   };
 
-  useEffect(() => {
-    (async () => {
-      setItems((pre) => ({ ...pre, loading: true }));
-
-      const res = await getAllContacts();
-      if (res.error) {
-        setItems((pre) => ({ ...pre, loading: false, error: res.msg }));
-      } else {
-        setItems((pre) => ({ ...pre, loading: false, data: res }));
-      }
-    })();
-  }, [deleteItem]);
-
   return (
     <div className="Center mt-14">
       <div className=" w-2/3 flex justify-center items-center">
-        {items.loading ? (
+        {isLoading ? (
           <LoadingComponent />
         ) : (
           <>
-            {items.error && <ErrorComponent />}
+            {isError.message && <ErrorComponent />}
 
             <div className=" w-full">
-              {items.data.map((i) => (
+              {data.contacts.data.map((i) => (
                 <ContactCard
                   key={i.id}
                   data={i}
